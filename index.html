@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dani Maromba Lomba</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff6b6b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DML">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{--bg:#f2f2f7;--card:#fff;--card2:#f8f8fa;--accent:#ff6b6b;--gold:#f0a500;--text:#1c1c1e;--muted:#8e8e93;--border:#e5e5ea;--green:#34c759;--blue:#007aff;--purple:#af52de;--red:#ff3b30;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:120px;}
+.header{background:#fff;padding:36px 20px 22px;text-align:center;border-bottom:1px solid var(--border);}
+.header-top{font-size:0.58rem;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:7px;font-weight:700;}
+.header h1{font-size:1.75rem;font-weight:800;color:var(--text);}
+.header h1 span{color:var(--accent);}
+.header-sub{color:var(--muted);font-size:0.72rem;margin-top:4px;}
+.hstats{display:flex;margin-top:16px;background:var(--bg);border-radius:14px;overflow:hidden;border:1px solid var(--border);}
+.stat{flex:1;text-align:center;padding:10px 6px;border-right:1px solid var(--border);}
+.stat:last-child{border-right:none;}
+.sv{font-size:1.05rem;color:var(--accent);font-weight:800;}
+.sl{font-size:0.54rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:1px;}
+.nav{display:flex;overflow-x:auto;background:#fff;border-bottom:1px solid var(--border);scrollbar-width:none;position:sticky;top:0;z-index:100;}
+.nav::-webkit-scrollbar{display:none;}
+.nb{flex:0 0 auto;padding:12px 12px;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.67rem;font-weight:600;cursor:pointer;transition:all 0.2s;border-bottom:2px solid transparent;white-space:nowrap;text-transform:uppercase;letter-spacing:0.8px;}
+.nb.active{color:var(--accent);border-bottom-color:var(--accent);}
+.page{display:none;padding:15px;}
+.page.active{display:block;animation:fi 0.2s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.stitle{font-size:1.2rem;font-weight:700;color:var(--text);margin-bottom:2px;}
+.ssub{font-size:0.72rem;color:var(--muted);margin-bottom:13px;}
+.plbl{font-size:0.59rem;text-transform:uppercase;letter-spacing:2px;font-weight:700;margin:13px 0 7px;display:flex;align-items:center;gap:7px;}
+.plbl::after{content:'';flex:1;height:1px;background:var(--border);}
+.plbl.red{color:var(--accent);}
+.plbl.blue{color:var(--blue);}
+.plbl.gold{color:var(--gold);}
+.plbl.green{color:var(--green);}
+.plbl.purple{color:var(--purple);}
+/* WEEK */
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;}
+.wcard{background:#fff;border-radius:15px;padding:13px;border:1px solid var(--border);cursor:pointer;transition:all 0.2s;position:relative;box-shadow:0 1px 6px rgba(0,0,0,0.05);}
+.wcard:active{transform:scale(0.97);}
+.wcard.gym{border-left:3px solid var(--accent);}
+.wcard.home{border-left:3px solid var(--blue);}
+.wcd{font-size:0.55rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:3px;}
+.wct{font-weight:700;font-size:0.82rem;color:var(--text);margin-bottom:2px;}
+.wcs{font-size:0.67rem;color:var(--muted);}
+.wcb{position:absolute;top:9px;right:9px;font-size:0.95rem;}
+.pill{display:inline-block;padding:2px 7px;border-radius:20px;font-size:0.57rem;font-weight:700;text-transform:uppercase;margin-top:5px;}
+.pg{background:rgba(255,107,107,0.1);color:var(--accent);}
+.ph{background:rgba(0,122,255,0.1);color:var(--blue);}
+/* DAY HEADER */
+.dh{background:#fff;border-radius:15px;padding:15px;margin-bottom:11px;border:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.di{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.45rem;flex-shrink:0;}
+.di.r{background:rgba(255,107,107,0.1);}
+.di.b{background:rgba(0,122,255,0.1);}
+.di.g{background:rgba(240,165,0,0.1);}
+.di.p{background:rgba(175,82,222,0.1);}
+.di.gr{background:rgba(52,199,89,0.1);}
+.dtitle{font-size:1.05rem;font-weight:700;color:var(--text);}
+.dmeta{font-size:0.68rem;color:var(--muted);margin-top:2px;}
+.dfocus{font-size:0.6rem;color:var(--accent);font-weight:700;margin-top:2px;}
+/* EXERCISE */
+.ec{background:#fff;border-radius:13px;padding:12px 13px;margin-bottom:6px;border:1px solid var(--border);transition:all 0.2s;}
+.ec.done{opacity:0.4;}
+.ec.done .en{text-decoration:line-through;}
+.et{display:flex;align-items:center;gap:10px;}
+.enum{width:29px;height:29px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:0.67rem;font-weight:800;flex-shrink:0;}
+.enum.r{background:rgba(255,107,107,0.1);color:var(--accent);}
+.enum.b{background:rgba(0,122,255,0.1);color:var(--blue);}
+.enum.g{background:rgba(240,165,0,0.1);color:var(--gold);}
+.enum.gr{background:rgba(52,199,89,0.1);color:var(--green);}
+.enum.p{background:rgba(175,82,222,0.1);color:var(--purple);}
+.ei{flex:1;min-width:0;}
+.en{font-weight:600;font-size:0.83rem;color:var(--text);}
+.es{font-size:0.68rem;color:var(--muted);margin-top:2px;line-height:1.45;}
+.ep{font-size:0.6rem;font-weight:700;color:var(--accent);margin-top:3px;text-transform:uppercase;}
+.eck{width:23px;height:23px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.72rem;color:transparent;transition:all 0.2s;}
+.ec.done .eck{background:var(--green);border-color:var(--green);color:#fff;}
+.wr{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);align-items:center;}
+.wr label{font-size:0.63rem;color:var(--muted);white-space:nowrap;}
+.wi{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:6px 9px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.8rem;}
+.wi:focus{outline:none;border-color:var(--accent);}
+.ws{font-size:0.63rem;color:var(--green);display:none;}
+.el{display:flex;gap:6px;margin-top:7px;padding-top:7px;border-top:1px solid var(--border);}
+.elb{flex:1;padding:6px;border-radius:9px;border:none;font-family:'DM Sans',sans-serif;font-size:0.67rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;}
+.byt{background:rgba(255,59,48,0.08);color:var(--red);}
+.bsub{background:rgba(240,165,0,0.08);color:var(--gold);}
+/* BLOCKS */
+.blk{background:#fff;border-radius:13px;padding:12px;margin-bottom:7px;border:1px solid var(--border);}
+.blt{font-size:0.63rem;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-bottom:8px;}
+.blt.warm{color:var(--gold);}
+.blt.cool{color:var(--blue);}
+.blt.home{color:var(--blue);}
+.blt.green{color:var(--green);}
+.bi{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--border);}
+.bi:last-child{border-bottom:none;}
+.bd{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+.bd.r{background:var(--accent);}
+.bd.b{background:var(--blue);}
+.bd.g{background:var(--gold);}
+.bd.gr{background:var(--green);}
+.bd.p{background:var(--purple);}
+.btxt{font-size:0.76rem;color:var(--text);line-height:1.4;}
+.bdet{font-size:0.66rem;color:var(--muted);margin-top:1px;}
+/* TIP */
+.tip{border-radius:11px;padding:10px 12px;margin:9px 0;font-size:0.74rem;line-height:1.5;}
+.tip.r{background:rgba(255,107,107,0.06);border:1px solid rgba(255,107,107,0.15);color:#cc3333;}
+.tip.b{background:rgba(0,122,255,0.06);border:1px solid rgba(0,122,255,0.15);color:#0044bb;}
+.tip.g{background:rgba(240,165,0,0.06);border:1px solid rgba(240,165,0,0.15);color:#886600;}
+.tip.gr{background:rgba(52,199,89,0.06);border:1px solid rgba(52,199,89,0.15);color:#1a7a35;}
+.tip strong{font-weight:700;}
+/* WEEK PROGRESS */
+.wpg{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:13px;}
+.wpd{text-align:center;background:#fff;border-radius:9px;padding:8px 3px;cursor:pointer;border:1px solid var(--border);transition:all 0.2s;}
+.wpd.chk{background:rgba(52,199,89,0.08);border-color:rgba(52,199,89,0.3);}
+.wpn{font-size:0.54rem;color:var(--muted);text-transform:uppercase;}
+.wpi{font-size:0.95rem;margin:2px 0;}
+.wpl{font-size:0.54rem;color:var(--muted);}
+.wpd.chk .wpl{color:var(--green);}
+/* PROG WEEK CARDS */
+.pwg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px;}
+.pwc{background:#fff;border-radius:11px;padding:9px 7px;text-align:center;border:1px solid var(--border);}
+.pwc.act{border-color:var(--accent);background:rgba(255,107,107,0.04);}
+.pwn{font-size:0.57rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+.pwc.act .pwn{color:var(--accent);}
+.pws{font-size:0.76rem;font-weight:700;color:var(--text);margin:3px 0;}
+.pwnote{font-size:0.6rem;color:var(--muted);}
+/* PROGRESS */
+.pc{background:#fff;border-radius:13px;padding:14px;margin-bottom:9px;border:1px solid var(--border);}
+.pct{font-size:0.63rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;font-weight:700;}
+.wlr{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:0.76rem;}
+.wlr:last-child{border-bottom:none;}
+.wld{color:var(--muted);}
+.wlv{font-weight:700;color:var(--accent);}
+.gw{background:var(--bg);border-radius:11px;padding:12px;margin-top:10px;text-align:center;}
+.gns{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.gn{font-size:1.45rem;font-weight:800;}
+.gn.cur{color:var(--accent);}
+.gn.tgt{color:var(--green);}
+.gt{background:var(--border);border-radius:4px;height:6px;overflow:hidden;}
+.gf{background:linear-gradient(90deg,var(--accent),var(--green));height:100%;border-radius:4px;transition:width 1s ease;}
+.gc{font-size:0.63rem;color:var(--muted);margin-top:5px;}
+.ir{display:flex;gap:7px;margin-bottom:10px;}
+.mi{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.83rem;}
+.mi:focus{outline:none;border-color:var(--accent);}
+.ab{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:9px 14px;font-family:'DM Sans',sans-serif;font-weight:700;cursor:pointer;font-size:0.78rem;}
+/* SHEETS */
+.sb{background:#fff;border-radius:13px;padding:14px;border:1px solid rgba(52,199,89,0.25);margin-bottom:12px;}
+.sb h3{font-size:0.83rem;font-weight:700;color:var(--green);margin-bottom:6px;}
+.sb p{font-size:0.71rem;color:var(--muted);line-height:1.5;margin-bottom:8px;}
+.si{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:8px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.78rem;margin-bottom:7px;}
+.si:focus{outline:none;border-color:var(--green);}
+.sbtn{background:rgba(52,199,89,0.1);color:var(--green);border:1px solid rgba(52,199,89,0.25);border-radius:9px;padding:9px;font-family:'DM Sans',sans-serif;font-weight:700;cursor:pointer;font-size:0.76rem;width:100%;}
+.ss{font-size:0.65rem;margin-top:4px;text-align:center;}
+.ss.ok{color:var(--green);}
+/* ACTIONS */
+.pa{display:flex;gap:7px;margin-top:13px;}
+.pb{flex:1;padding:12px 7px;border-radius:12px;border:none;font-family:'DM Sans',sans-serif;font-size:0.73rem;font-weight:700;cursor:pointer;transition:all 0.2s;text-transform:uppercase;letter-spacing:0.5px;}
+.bp{background:var(--accent);color:#fff;}
+.bsh{background:rgba(52,199,89,0.1);color:var(--green);border:1px solid rgba(52,199,89,0.2);}
+.bex{background:rgba(0,122,255,0.08);color:var(--blue);border:1px solid rgba(0,122,255,0.15);}
+.bdr{background:rgba(255,59,48,0.08);color:var(--red);border:1px solid rgba(255,59,48,0.15);}
+/* ACEL */
+.ac{background:#fff;border-radius:13px;padding:12px;margin-bottom:7px;border:1px solid var(--border);}
+.ach{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.aci{width:36px;height:36px;border-radius:10px;background:rgba(240,165,0,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.acn{font-weight:700;font-size:0.88rem;color:var(--gold);}
+.acm{font-size:0.66rem;color:var(--muted);}
+.acl{list-style:none;}
+.acl li{font-size:0.71rem;color:var(--muted);padding:4px 0;border-bottom:1px solid var(--border);display:flex;gap:6px;line-height:1.4;}
+.acl li:last-child{border-bottom:none;}
+.acl li::before{content:'→';color:var(--gold);flex-shrink:0;}
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:500;align-items:flex-end;}
+.mo.show{display:flex;}
+.mb{background:#fff;border-radius:22px 22px 0 0;padding:20px 16px 34px;width:100%;max-height:70vh;overflow-y:auto;}
+.mh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;}
+.mt{font-size:0.98rem;font-weight:700;color:var(--text);flex:1;padding-right:9px;}
+.mc{background:var(--bg);border:none;color:var(--muted);width:26px;height:26px;border-radius:50%;font-size:0.8rem;cursor:pointer;}
+.ms{font-size:0.68rem;color:var(--muted);margin-bottom:12px;}
+.si2{background:var(--bg);border-radius:10px;padding:10px 12px;margin-bottom:6px;border:1px solid var(--border);font-size:0.8rem;font-weight:600;color:var(--text);}
+/* TOAST */
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%) translateY(16px);background:#1c1c1e;color:#fff;padding:10px 19px;border-radius:26px;font-size:0.78rem;font-weight:700;opacity:0;transition:all 0.3s;z-index:999;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">Programa · Maio 2026</div>
+  <h1>Dani <span>Maromba</span> Lomba</h1>
+  <div class="header-sub">Definição · Planet Fitness · 35-45 min · 5x semana</div>
+  <div class="hstats">
+    <div class="stat"><div class="sv" id="st-streak">0</div><div class="sl">Streak</div></div>
+    <div class="stat"><div class="sv" id="st-week">0/5</div><div class="sl">Semana</div></div>
+    <div class="stat"><div class="sv">Jul</div><div class="sl">Meta</div></div>
+    <div class="stat"><div class="sv">💪</div><div class="sl">Foco</div></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <button class="nb active" onclick="show('semana')">📅 Semana</button>
+  <button class="nb" onclick="show('seg')">Seg · Pernas</button>
+  <button class="nb" onclick="show('ter')">Ter · Costas</button>
+  <button class="nb" onclick="show('qua')">Qua · Glúteo</button>
+  <button class="nb" onclick="show('qui')">Qui · Quad</button>
+  <button class="nb" onclick="show('sex')">Sex · Upper</button>
+  <button class="nb" onclick="show('casa')">🏠 Casa</button>
+  <button class="nb" onclick="show('acel')">⚡ Rápido</button>
+  <button class="nb" onclick="show('prog')">📊 Progresso</button>
+</nav>
+
+<!-- SEMANA -->
+<div id="page-semana" class="page active">
+  <div class="stitle">Sua Semana</div>
+  <div class="ssub">Toque para abrir o treino do dia</div>
+  <div class="wgrid">
+    <div class="wcard gym" onclick="show('seg')"><div class="wcb">🦵</div><div class="wcd">Segunda</div><div class="wct">Pernas + Glúteo</div><div class="wcs">Smith · Polia · Máquinas</div><span class="pill pg">Academia</span></div>
+    <div class="wcard gym" onclick="show('ter')"><div class="wcb">💪</div><div class="wcd">Terça</div><div class="wct">Costas + Ombros</div><div class="wcs">Graviton · Polia · Halteres</div><span class="pill pg">Academia</span></div>
+    <div class="wcard gym" onclick="show('qua')"><div class="wcb">🍑</div><div class="wcd">Quarta</div><div class="wct">Glúteo + Posterior</div><div class="wcs">Stiff · Polia · Flexora</div><span class="pill pg">Academia</span></div>
+    <div class="wcard gym" onclick="show('qui')"><div class="wcb">🏋️</div><div class="wcd">Quinta</div><div class="wct">Pernas + Quadríceps</div><div class="wcs">Leg Press · Extensora · Afundo</div><span class="pill pg">Academia</span></div>
+    <div class="wcard gym" onclick="show('sex')" style="grid-column:span 2;"><div class="wcb">🔥</div><div class="wcd">Sexta</div><div class="wct">Upper Body + Escada</div><div class="wcs">Braços · Peitoral · 15 min StairMaster</div><span class="pill pg">Academia</span></div>
+  </div>
+  <div class="tip g"><strong>🏠 Não vai à academia?</strong> Cada dia tem versão em casa com bands, caneleira e halteres.</div>
+  <div class="tip r"><strong>⏰ Regra dos 2kg:</strong> Completou todas as reps com boa forma? Adiciona 2kg semana que vem. Não completou? Mantém o peso.</div>
+  <div class="stitle" style="margin-top:5px;">Esta Semana</div>
+  <div class="ssub" style="margin-bottom:8px;">Toque para marcar treino feito</div>
+  <div class="wpg">
+    <div class="wpd" onclick="toggleDay(0)" id="wd0"><div class="wpn">Seg</div><div class="wpi">🦵</div><div class="wpl" id="wd0l">—</div></div>
+    <div class="wpd" onclick="toggleDay(1)" id="wd1"><div class="wpn">Ter</div><div class="wpi">💪</div><div class="wpl" id="wd1l">—</div></div>
+    <div class="wpd" onclick="toggleDay(2)" id="wd2"><div class="wpn">Qua</div><div class="wpi">🍑</div><div class="wpl" id="wd2l">—</div></div>
+    <div class="wpd" onclick="toggleDay(3)" id="wd3"><div class="wpn">Qui</div><div class="wpi">🏋️</div><div class="wpl" id="wd3l">—</div></div>
+    <div class="wpd" onclick="toggleDay(4)" id="wd4"><div class="wpn">Sex</div><div class="wpi">🔥</div><div class="wpl" id="wd4l">—</div></div>
+  </div>
+  <div class="stitle">Progressão 4 Semanas</div>
+  <div class="ssub" style="margin-bottom:8px;">Como evoluir semana a semana</div>
+  <div class="pwg">
+    <div class="pwc act"><div class="pwn">Sem 1-2</div><div class="pws">3×12-15</div><div class="pwnote">Técnica primeiro</div></div>
+    <div class="pwc"><div class="pwn">Sem 3</div><div class="pws">3×10-12</div><div class="pwnote">+2kg · Drop Set</div></div>
+    <div class="pwc"><div class="pwn">Sem 4</div><div class="pws">4×8-12</div><div class="pwnote">+2kg · Rest&Pause</div></div>
+    <div class="pwc"><div class="pwn">Sem 5+</div><div class="pws">4×6-10</div><div class="pwnote">Novo programa</div></div>
+  </div>
+</div>
+
+<!-- SEGUNDA -->
+<div id="page-seg" class="page">
+  <div class="dh"><div class="di r">🦵</div><div><div class="dtitle">Pernas + Glúteo</div><div class="dmeta">Segunda · 35-40 min</div><div class="dfocus">Foco: quadríceps + glúteo</div></div></div>
+  <div class="plbl gold">Aquecimento · 5 min</div>
+  <div class="blk"><div class="blt warm">Ativação</div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Mobilidade de cócoras</div><div class="bdet">2×10 · desce devagar, abre os joelhos para fora</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Agachamento com salto</div><div class="bdet">2×10 · agacha fundo, sobe com salto, aterrissa suave</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Glute bridge no chão</div><div class="bdet">1×15 · deita, pés no chão, sobe o quadril e aperta o glúteo no topo</div></div></div>
+  </div>
+  <div class="plbl red">Treino Principal</div>
+  <div class="ec" id="seg1"><div class="et"><div class="enum r">1</div><div class="ei"><div class="en">Agachamento Sumô no Smith</div><div class="es">4 séries · S1: 12-15 · S2: 10-12 · S3: 8-10 · S4: 6-8<br>Pés bem abertos, dedos 45°. Desça devagar, joelhos seguem os dedos.</div><div class="ep">Progressão de carga · +2kg/semana</div></div><div class="eck" onclick="done('seg1')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-seg1" placeholder="ex: 5" oninput="as('seg1')"><span class="ws" id="ws-seg1">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=Bclssc88Xjs')">▶ YouTube</button><button class="elb bsub" onclick="sub('Agachamento Sumô Smith',['Leg Press pés abertos','Sumô com Halteres'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="seg2"><div class="et"><div class="enum r">2</div><div class="ei"><div class="en">Polia Glúteo Cruzado</div><div class="es">3 séries · 12-15 rpt cada lado<br>Tornozeira na polia baixa. Cruza a perna para trás em diagonal. Aperta o glúteo no topo.</div><div class="ep">+2kg/semana</div></div><div class="eck" onclick="done('seg2')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-seg2" placeholder="ex: 8" oninput="as('seg2')"><span class="ws" id="ws-seg2">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=SozaXNWVZxA')">▶ YouTube</button><button class="elb bsub" onclick="sub('Polia Glúteo Cruzado',['Glúteo Coice na Polia','Extensão de Quadril Máquina'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="seg3"><div class="et"><div class="enum r">3</div><div class="ei"><div class="en">Cadeira Extensora</div><div class="es">3 séries · 12-15 rpt<br>Senta no fundo da cadeira. Estende as pernas devagar. Segura 1s no topo.</div><div class="ep">+2kg/semana</div></div><div class="eck" onclick="done('seg3')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-seg3" placeholder="ex: 20" oninput="as('seg3')"><span class="ws" id="ws-seg3">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=0tn5K9NlCfo')">▶ YouTube</button><button class="elb bsub" onclick="sub('Cadeira Extensora',['Hack Squat','Leg Press pés altos'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="seg4"><div class="et"><div class="enum r">4</div><div class="ei"><div class="en">Cadeira Abdutora — Tronco Inclinado</div><div class="es">3 séries · 15-20 rpt<br>Inclina o tronco levemente para frente — ativa mais o glúteo médio. Controla a descida.</div><div class="ep">+5 lbs/semana</div></div><div class="eck" onclick="done('seg4')">✓</div></div>
+    <div class="wr"><label>Peso lbs:</label><input class="wi" type="number" id="w-seg4" placeholder="ex: 100" oninput="as('seg4')"><span class="ws" id="ws-seg4">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=SozaXNWVZxA')">▶ YouTube</button><button class="elb bsub" onclick="sub('Cadeira Abdutora',['Passada lateral c/ band','Abdução na polia'])">↔ Substituições</button></div>
+  </div>
+  <div class="plbl blue">Alongamento · 5 min</div>
+  <div class="blk"><div class="blt cool">Resfriamento</div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Quadríceps em pé</div><div class="bdet">30s cada lado — segura o pé atrás</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Glúteo figura 4</div><div class="bdet">30s cada lado — deita, cruza a perna e puxa</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Posterior de coxa</div><div class="bdet">30s cada lado — perna estendida, inclina o tronco</div></div></div>
+  </div>
+  <div class="pa"><button class="pb bp" onclick="finish('SEG','Pernas+Glúteo')">✅ Concluir</button><button class="pb bsh" onclick="sync('SEG')">📊 Drive</button></div>
+</div>
+
+<!-- TERÇA -->
+<div id="page-ter" class="page">
+  <div class="dh"><div class="di b">💪</div><div><div class="dtitle">Costas + Ombros</div><div class="dmeta">Terça · 35-40 min</div><div class="dfocus">Foco: dorsal + deltóide</div></div></div>
+  <div class="plbl gold">Aquecimento · 5 min</div>
+  <div class="blk"><div class="blt warm">Ativação</div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Rotação de ombro com braço estendido</div><div class="bdet">2×10 cada lado — círculos lentos para frente e para trás</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Remada curvada leve para ativar</div><div class="bdet">1×12 com carga bem leve — sente as costas trabalhando</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Elevação lateral com halter leve</div><div class="bdet">1×12 — prepara o ombro</div></div></div>
+  </div>
+  <div class="plbl blue">Treino Principal</div>
+  <div class="ec" id="ter1"><div class="et"><div class="enum b">1</div><div class="ei"><div class="en">Graviton — Pegada Aberta</div><div class="es">4 séries · S1: 12-15 · S2: 10-12 · S3: 8-10 · S4: 6-8<br>Puxa até o queixo. Cotovelos apontam para baixo. Desce devagar contando 3s.</div><div class="ep">Reduz assistência 2kg/semana</div></div><div class="eck" onclick="done('ter1')">✓</div></div>
+    <div class="wr"><label>Assist. kg:</label><input class="wi" type="number" id="w-ter1" placeholder="ex: 25" oninput="as('ter1')"><span class="ws" id="ws-ter1">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=0tn5K9NlCfo')">▶ YouTube</button><button class="elb bsub" onclick="sub('Graviton',['Pulley Frente','Remada Alta na Polia'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="ter2"><div class="et"><div class="enum b">2</div><div class="ei"><div class="en">Remada Sentada Máquina</div><div class="es">3 séries · 12-15 rpt<br>Puxa o cabo até a barriga. Cotovelos colados ao corpo. Abre o peito no final.</div><div class="ep">+2kg/semana</div></div><div class="eck" onclick="done('ter2')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-ter2" placeholder="ex: 25" oninput="as('ter2')"><span class="ws" id="ws-ter2">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=po5ihi0-5rk')">▶ YouTube</button><button class="elb bsub" onclick="sub('Remada Sentada',['Remada Curvada Halteres','Serrote Unilateral'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="ter3"><div class="et"><div class="enum b">3</div><div class="ei"><div class="en">Elevação Lateral com Halteres</div><div class="es">3 séries · 12-15 rpt<br>Cotovelo levemente dobrado. Sobe até a altura do ombro. Desce devagar — não deixa cair.</div><div class="ep">+1kg/semana</div></div><div class="eck" onclick="done('ter3')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-ter3" placeholder="ex: 5" oninput="as('ter3')"><span class="ws" id="ws-ter3">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=QPwO8jqZgqY')">▶ YouTube</button><button class="elb bsub" onclick="sub('Elevação Lateral',['Elevação Lateral na Polia','Face Pull'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="ter4"><div class="et"><div class="enum b">4</div><div class="ei"><div class="en">Face Pull na Polia com Corda</div><div class="es">3 séries · 15 rpt<br>Polia na altura do rosto. Puxa a corda em direção ao rosto abrindo os cotovelos. Ótimo para postura.</div><div class="ep">+2kg/semana</div></div><div class="eck" onclick="done('ter4')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-ter4" placeholder="ex: 10" oninput="as('ter4')"><span class="ws" id="ws-ter4">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=po5ihi0-5rk')">▶ YouTube</button><button class="elb bsub" onclick="sub('Face Pull',['Crucifixo Inverso Halteres','Remada Alta Barra W'])">↔ Substituições</button></div>
+  </div>
+  <div class="plbl blue">Alongamento · 5 min</div>
+  <div class="blk"><div class="blt cool">Resfriamento</div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Ombro cruzado</div><div class="bdet">30s cada lado — puxa o braço para o lado oposto</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Gato e vaca</div><div class="bdet">10 rpt — quatro apoios, arqueia e curva a coluna devagar</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Abertura de peito na parede</div><div class="bdet">30s cada lado — apoia a mão, gira o corpo para abrir o peito</div></div></div>
+  </div>
+  <div class="pa"><button class="pb bp" onclick="finish('TER','Costas+Ombros')">✅ Concluir</button><button class="pb bsh" onclick="sync('TER')">📊 Drive</button></div>
+</div>
+
+<!-- QUARTA -->
+<div id="page-qua" class="page">
+  <div class="dh"><div class="di r">🍑</div><div><div class="dtitle">Glúteo + Posterior</div><div class="dmeta">Quarta · 35-40 min</div><div class="dfocus">Foco: glúteo máximo + isquiotibiais</div></div></div>
+  <div class="plbl gold">Aquecimento · 5 min</div>
+  <div class="blk"><div class="blt warm">Ativação</div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Glute bridge no chão</div><div class="bdet">2×15 · aperta o glúteo forte no topo, segura 2s</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Clamshell com band</div><div class="bdet">2×15 cada lado · band acima do joelho, abre como concha</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Perdigueiro alternado</div><div class="bdet">2×10 cada lado · quatro apoios, estende braço e perna opostos</div></div></div>
+  </div>
+  <div class="plbl red">Treino Principal</div>
+  <div class="ec" id="qua1"><div class="et"><div class="enum r">1</div><div class="ei"><div class="en">Stiff com Halteres</div><div class="es">4 séries · S1: 12-15 · S2: 10-12 · S3: 8-10 · S4: 8-10<br>Joelhos levemente dobrados. Empurra o bumbum para trás ao descer. Halteres colados à perna. Sobe contraindo o glúteo.</div><div class="ep">⚠️ Lombar — técnica antes do peso · +2kg/semana</div></div><div class="eck" onclick="done('qua1')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-qua1" placeholder="ex: 10" oninput="as('qua1')"><span class="ws" id="ws-qua1">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=601YoPL6y6E')">▶ YouTube</button><button class="elb bsub" onclick="sub('Stiff Halteres',['Mesa Flexora','Stiff Unilateral'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="qua2"><div class="et"><div class="enum r">2</div><div class="ei"><div class="en">Polia Glúteo Cruzado</div><div class="es">3 séries · 12-15 rpt cada lado<br>Tornozeira na polia baixa. Cruza a perna para trás em diagonal. Aperta no topo. Não compensa com o tronco.</div><div class="ep">+2kg/semana</div></div><div class="eck" onclick="done('qua2')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-qua2" placeholder="ex: 8" oninput="as('qua2')"><span class="ws" id="ws-qua2">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=SozaXNWVZxA')">▶ YouTube</button><button class="elb bsub" onclick="sub('Polia Glúteo',['Glúteo Coice na Polia','Extensão de Quadril Máquina'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="qua3"><div class="et"><div class="enum r">3</div><div class="ei"><div class="en">Cadeira Flexora</div><div class="es">3 séries · 12-15 rpt<br>Alinha o joelho com o pivô. Dobra devagar, desce mais devagar ainda. Contrai o posterior no topo.</div><div class="ep">+2kg/semana</div></div><div class="eck" onclick="done('qua3')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-qua3" placeholder="ex: 20" oninput="as('qua3')"><span class="ws" id="ws-qua3">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=601YoPL6y6E')">▶ YouTube</button><button class="elb bsub" onclick="sub('Cadeira Flexora',['Mesa Flexora Sentada','Stiff Unilateral'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="qua4"><div class="et"><div class="enum r">4</div><div class="ei"><div class="en">Cadeira Abdutora — Tronco Inclinado</div><div class="es">3 séries · 15-20 rpt<br>Inclina o tronco para frente. Controla a descida. Não deixa bater.</div><div class="ep">+5 lbs/semana</div></div><div class="eck" onclick="done('qua4')">✓</div></div>
+    <div class="wr"><label>Peso lbs:</label><input class="wi" type="number" id="w-qua4" placeholder="ex: 100" oninput="as('qua4')"><span class="ws" id="ws-qua4">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=SozaXNWVZxA')">▶ YouTube</button><button class="elb bsub" onclick="sub('Cadeira Abdutora',['Passada lateral c/ band','Abdução na polia'])">↔ Substituições</button></div>
+  </div>
+  <div class="plbl blue">Alongamento · 5 min</div>
+  <div class="blk"><div class="blt cool">Resfriamento</div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Posterior de coxa</div><div class="bdet">30s cada lado — perna estendida no chão, inclina o tronco</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Glúteo figura 4</div><div class="bdet">30s cada lado — deita e cruza a perna</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Joelhos no peito</div><div class="bdet">30s — deita, abraça os dois joelhos (ótimo para a lombar!)</div></div></div>
+  </div>
+  <div class="pa"><button class="pb bp" onclick="finish('QUA','Glúteo+Posterior')">✅ Concluir</button><button class="pb bsh" onclick="sync('QUA')">📊 Drive</button></div>
+</div>
+
+<!-- QUINTA -->
+<div id="page-qui" class="page">
+  <div class="dh"><div class="di g">🏋️</div><div><div class="dtitle">Pernas + Quadríceps</div><div class="dmeta">Quinta · 35-40 min</div><div class="dfocus">Foco: quadríceps + posterior</div></div></div>
+  <div class="plbl gold">Aquecimento · 5 min</div>
+  <div class="blk"><div class="blt warm">Ativação</div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Mobilidade de quadril e tronco</div><div class="bdet">2×8 cada lado — uma perna à frente, gira o tronco</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Agachamento com pausa</div><div class="bdet">2×10 · desce, segura 3s embaixo, sobe</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Elevação pélvica isométrica</div><div class="bdet">2×10 · sobe o quadril, segura 3s no topo</div></div></div>
+  </div>
+  <div class="plbl gold">Treino Principal</div>
+  <div class="ec" id="qui1"><div class="et"><div class="enum g">1</div><div class="ei"><div class="en">Leg Press 45°</div><div class="es">4 séries · S1: 12-15 · S2: 10-12 · S3: 8-10 · S4: 6-8<br>Pés na largura do quadril. Desce até as coxas ficarem paralelas. Não trava os joelhos em cima.</div><div class="ep">+5kg/semana</div></div><div class="eck" onclick="done('qui1')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-qui1" placeholder="ex: 40" oninput="as('qui1')"><span class="ws" id="ws-qui1">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=gEYYCvNI6hI')">▶ YouTube</button><button class="elb bsub" onclick="sub('Leg Press',['Agachamento Sumô Smith','Hack Squat'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="qui2"><div class="et"><div class="enum g">2</div><div class="ei"><div class="en">Cadeira Extensora</div><div class="es">3 séries · 12-15 rpt<br>Segura 1s no topo. Desce devagar contando 3s. Sente o quadríceps queimar.</div><div class="ep">+2kg/semana</div></div><div class="eck" onclick="done('qui2')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-qui2" placeholder="ex: 20" oninput="as('qui2')"><span class="ws" id="ws-qui2">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=0tn5K9NlCfo')">▶ YouTube</button><button class="elb bsub" onclick="sub('Extensora',['Leg Press pés altos','Agachamento Smith'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="qui3"><div class="et"><div class="enum g">3</div><div class="ei"><div class="en">Afundo no Smith</div><div class="es">3 séries · 10-12 rpt cada lado<br>Uma perna à frente. Desce o joelho traseiro em direção ao chão. Tronco reto. Sobe pela perna da frente.</div><div class="ep">⚠️ Lombar neutra · +2kg/semana</div></div><div class="eck" onclick="done('qui3')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-qui3" placeholder="ex: 5" oninput="as('qui3')"><span class="ws" id="ws-qui3">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=Bclssc88Xjs')">▶ YouTube</button><button class="elb bsub" onclick="sub('Afundo Smith',['Afundo com Halteres','Passada Máquina'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="qui4"><div class="et"><div class="enum g">4</div><div class="ei"><div class="en">Stiff Unilateral com Halter</div><div class="es">3 séries · 10-12 rpt cada lado<br>Uma perna de apoio levemente dobrada. Inclina o tronco e a outra perna sobe para trás. Mantém o equilíbrio.</div><div class="ep">⚠️ Lombar · começa sem peso para aprender</div></div><div class="eck" onclick="done('qui4')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-qui4" placeholder="ex: 5" oninput="as('qui4')"><span class="ws" id="ws-qui4">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=601YoPL6y6E')">▶ YouTube</button><button class="elb bsub" onclick="sub('Stiff Unilateral',['Mesa Flexora','Cadeira Flexora'])">↔ Substituições</button></div>
+  </div>
+  <div class="plbl blue">Alongamento · 5 min</div>
+  <div class="blk"><div class="blt cool">Resfriamento</div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Quadríceps em pé</div><div class="bdet">30s cada lado</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Posterior de coxa</div><div class="bdet">30s cada lado</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Panturrilha na parede</div><div class="bdet">30s cada lado — pé apoiado na parede, calcanhar no chão</div></div></div>
+  </div>
+  <div class="pa"><button class="pb bp" onclick="finish('QUI','Pernas+Quad')">✅ Concluir</button><button class="pb bsh" onclick="sync('QUI')">📊 Drive</button></div>
+</div>
+
+<!-- SEXTA -->
+<div id="page-sex" class="page">
+  <div class="dh"><div class="di p">🔥</div><div><div class="dtitle">Upper Body + Escada</div><div class="dmeta">Sexta · 40-45 min</div><div class="dfocus">Braços + Peitoral + 15 min StairMaster</div></div></div>
+  <div class="plbl gold">Aquecimento · 5 min</div>
+  <div class="blk"><div class="blt warm">Ativação</div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Rotação de ombros com elástico leve</div><div class="bdet">2×10 cada lado — prepara o manguito</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Flexão de parede</div><div class="bdet">2×10 — mãos na parede, cotovelos dobram 90°</div></div></div>
+  </div>
+  <div class="plbl purple">Treino Principal</div>
+  <div class="ec" id="sex1"><div class="et"><div class="enum p">1</div><div class="ei"><div class="en">Graviton — Pegada Fechada</div><div class="es">3 séries · 10-12 rpt<br>Mãos próximas. Cotovelos colados ao corpo na descida. Ativa mais o bíceps.</div><div class="ep">Reduz assistência 2kg/semana</div></div><div class="eck" onclick="done('sex1')">✓</div></div>
+    <div class="wr"><label>Assist. kg:</label><input class="wi" type="number" id="w-sex1" placeholder="ex: 25" oninput="as('sex1')"><span class="ws" id="ws-sex1">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=0tn5K9NlCfo')">▶ YouTube</button><button class="elb bsub" onclick="sub('Graviton Fechado',['Pulley Fechado','Bíceps Polia Alta'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="sex2"><div class="et"><div class="enum p">2</div><div class="ei"><div class="en">Supino Reto Máquina</div><div class="es">3 séries · 12-15 rpt<br>Costas coladas ao encosto. Empurra para frente. Desce devagar sentindo o peito.</div><div class="ep">+2kg/semana</div></div><div class="eck" onclick="done('sex2')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-sex2" placeholder="ex: 15" oninput="as('sex2')"><span class="ws" id="ws-sex2">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=QPwO8jqZgqY')">▶ YouTube</button><button class="elb bsub" onclick="sub('Supino Máquina',['Supino Halteres','Flexão no chão'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="sex3"><div class="et"><div class="enum p">3</div><div class="ei"><div class="en">Tríceps Polia com Corda</div><div class="es">3 séries · 12-15 rpt<br>Cotovelos fixos ao lado do corpo. Abre a corda para baixo no final. Desce devagar.</div><div class="ep">+2kg/semana</div></div><div class="eck" onclick="done('sex3')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-sex3" placeholder="ex: 10" oninput="as('sex3')"><span class="ws" id="ws-sex3">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=QPwO8jqZgqY')">▶ YouTube</button><button class="elb bsub" onclick="sub('Tríceps Polia',['Tríceps Francês Halteres','Tríceps Mergulho'])">↔ Substituições</button></div>
+  </div>
+  <div class="ec" id="sex4"><div class="et"><div class="enum p">4</div><div class="ei"><div class="en">Bíceps na Polia com Barra</div><div class="es">3 séries · 12-15 rpt<br>Cotovelos fixos. Sobe até os ombros. Desce completamente para alongar o bíceps.</div><div class="ep">+2kg/semana</div></div><div class="eck" onclick="done('sex4')">✓</div></div>
+    <div class="wr"><label>Peso kg:</label><input class="wi" type="number" id="w-sex4" placeholder="ex: 8" oninput="as('sex4')"><span class="ws" id="ws-sex4">✓</span></div>
+    <div class="el"><button class="elb byt" onclick="yt('https://www.youtube.com/watch?v=601YoPL6y6E')">▶ YouTube</button><button class="elb bsub" onclick="sub('Bíceps Polia',['Rosca Direta Halteres','Rosca Martelo'])">↔ Substituições</button></div>
+  </div>
+  <div class="plbl green">Finisher · StairMaster 15 min</div>
+  <div class="blk"><div class="blt green">🪜 Escada</div>
+    <div class="bi"><div class="bd gr"></div><div><div class="btxt">Velocidade baixa a moderada — nível 4-6</div><div class="bdet">Não se apoia no corrimão. A cada degrau aperta o glúteo.</div></div></div>
+    <div class="bi"><div class="bd gr"></div><div><div class="btxt">Tronco levemente inclinado para frente</div><div class="bdet">Isso ativa mais o glúteo do que ficar ereta</div></div></div>
+    <div class="bi"><div class="bd gr"></div><div><div class="btxt">Meta: +1 nível por semana</div><div class="bdet">Sem 1: nível 4 → Sem 2: nível 5 → Sem 3: nível 6...</div></div></div>
+  </div>
+  <div class="plbl blue">Alongamento · 5 min</div>
+  <div class="blk"><div class="blt cool">Resfriamento</div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Tríceps — braço dobrado atrás da cabeça</div><div class="bdet">30s cada lado</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Bíceps — braço estendido, palma para cima</div><div class="bdet">30s cada lado — gira o ombro para sentir</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Respiração profunda</div><div class="bdet">5 respirações · inspira 4s · segura 2s · expira 6s</div></div></div>
+  </div>
+  <div class="pa"><button class="pb bp" onclick="finish('SEX','Upper+Escada')">✅ Concluir</button><button class="pb bsh" onclick="sync('SEX')">📊 Drive</button></div>
+</div>
+
+<!-- CASA -->
+<div id="page-casa" class="page">
+  <div class="dh"><div class="di b">🏠</div><div><div class="dtitle">Treinos em Casa</div><div class="dmeta">Bands · Caneleira · Halteres 10 lbs · Bike/Esteira</div></div></div>
+  <div class="tip b"><strong>Equipamentos:</strong> bands, caneleira, halteres até 10 lbs, bike ou esteira. Sem barra necessária!</div>
+
+  <div class="plbl blue">Segunda em Casa · Pernas + Glúteo</div>
+  <div class="blk"><div class="blt warm">Aquecimento (5 min)</div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Mobilidade de cócoras 2×10</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Agachamento com salto 2×10</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Glute bridge no chão 2×15</div></div></div>
+  </div>
+  <div class="blk"><div class="blt home">Treino</div>
+    <div class="bi"><div class="bd r"></div><div><div class="btxt">Agachamento Sumô com Halter</div><div class="bdet">4×12-15 · segura 1 halter com as duas mãos. Pés bem abertos.</div></div></div>
+    <div class="bi"><div class="bd r"></div><div><div class="btxt">Glúteo Coice com Caneleira</div><div class="bdet">3×15 cada lado · quatro apoios, perna dobrada 90°, empurra o calcanhar para o teto</div></div></div>
+    <div class="bi"><div class="bd r"></div><div><div class="btxt">Passada Lateral com Band</div><div class="bdet">3×15 cada lado · band acima dos joelhos, passos laterais controlados</div></div></div>
+    <div class="bi"><div class="bd r"></div><div><div class="btxt">Agachamento Borboleta com Band</div><div class="bdet">3×15 · band acima dos joelhos, abre os joelhos para fora ao descer</div></div></div>
+    <div class="bi"><div class="bd gr"></div><div><div class="btxt">Bike ou Esteira — 15 min ritmo moderado</div></div></div>
+  </div>
+
+  <div class="plbl blue">Terça em Casa · Costas + Ombros</div>
+  <div class="blk"><div class="blt home">Treino</div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Desenvolvimento com Halteres</div><div class="bdet">3×12-15 · empurra para cima sem travar os cotovelos</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Elevação Lateral com Halteres</div><div class="bdet">3×12-15 · cotovelo levemente dobrado, sobe até altura do ombro</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Remada Curvada com Halteres</div><div class="bdet">3×12-15 · inclina o tronco 45°, puxa os cotovelos para trás</div></div></div>
+    <div class="bi"><div class="bd b"></div><div><div class="btxt">Crucifixo Inverso com Halteres</div><div class="bdet">3×15 · tronco inclinado, abre os braços para os lados</div></div></div>
+  </div>
+
+  <div class="plbl blue">Quarta em Casa · Glúteo + Posterior</div>
+  <div class="blk"><div class="blt home">Treino</div>
+    <div class="bi"><div class="bd r"></div><div><div class="btxt">Stiff com Halteres 10 lbs</div><div class="bdet">4×12-15 · foco na técnica, empurra o bumbum para trás</div></div></div>
+    <div class="bi"><div class="bd r"></div><div><div class="btxt">Glúteo Coice com Caneleira + Band</div><div class="bdet">3×20 cada lado · band acima dos joelhos para intensificar</div></div></div>
+    <div class="bi"><div class="bd r"></div><div><div class="btxt">Abdução Deitada com Band</div><div class="bdet">3×20 · deita de lado, band acima dos joelhos, abre a perna de cima</div></div></div>
+    <div class="bi"><div class="bd r"></div><div><div class="btxt">Elevação Pélvica com Band</div><div class="bdet">3×20 · band acima dos joelhos, deita, pés no chão, sobe e aperta forte no topo</div></div></div>
+  </div>
+
+  <div class="plbl blue">Quinta em Casa · Pernas Completo</div>
+  <div class="blk"><div class="blt home">Treino</div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Afundo com Halteres</div><div class="bdet">3×12 cada lado · tronco reto, desce o joelho traseiro em direção ao chão</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Agachamento Sumô com Halter</div><div class="bdet">3×15 · segura 1 halter com as duas mãos na frente</div></div></div>
+    <div class="bi"><div class="bd g"></div><div><div class="btxt">Stiff Unilateral Peso Corporal</div><div class="bdet">3×12 cada lado · sem peso, foca no equilíbrio e na técnica</div></div></div>
+    <div class="bi"><div class="bd gr"></div><div><div class="btxt">Bike ou Esteira — 20 min ritmo moderado</div></div></div>
+  </div>
+
+  <div class="plbl blue">Sexta em Casa · Upper + Cardio</div>
+  <div class="blk"><div class="blt home">Treino</div>
+    <div class="bi"><div class="bd p"></div><div><div class="btxt">Rosca Direta com Halteres</div><div class="bdet">3×12-15 · cotovelos fixos, sobe devagar, desce devagar</div></div></div>
+    <div class="bi"><div class="bd p"></div><div><div class="btxt">Tríceps Coice com Halter</div><div class="bdet">3×12-15 cada lado · tronco inclinado, cotovelo fixo, estende o braço para trás</div></div></div>
+    <div class="bi"><div class="bd p"></div><div><div class="btxt">Desenvolvimento com Halteres</div><div class="bdet">3×12-15 · empurra para cima, desce até os cotovelos ficarem a 90°</div></div></div>
+    <div class="bi"><div class="bd gr"></div><div><div class="btxt">Bike ou Esteira — 20 min intensidade moderada</div></div></div>
+  </div>
+  <div class="tip gr"><strong>💡 Dica:</strong> Sem halter? Usa garrafas d'água cheias. O movimento importa mais que o peso!</div>
+</div>
+
+<!-- ACELERADORES -->
+<div id="page-acel" class="page">
+  <div class="dh"><div class="di g">⚡</div><div><div class="dtitle">Treinos Rápidos</div><div class="dmeta">20-30 min · Para dias corridos · 30s exec + 10s descanso</div></div></div>
+  <div class="ac"><div class="ach"><div class="aci">🔥</div><div><div class="acn">Seca Total</div><div class="acm">~20 min · Corpo todo</div></div></div>
+    <ul class="acl"><li>Corrida lateral</li><li>Mountain Climber</li><li>Chute agachando c/ perna esticada</li><li>Agacha c/ salto girando o corpo</li><li>Prancha girando quadril</li><li>Corrida alta c/ toque joelhos</li><li>Afundo alternado com salto</li><li>Corrida frente e trás</li><li>Burpee</li></ul>
+  </div>
+  <div class="ac"><div class="ach"><div class="aci">🍑</div><div><div class="acn">Bumbum Empinado</div><div class="acm">~15 min · Foco glúteo</div></div></div>
+    <ul class="acl"><li>Elevação Pélvica 3/7: 7+7 · 6+6 · 5+5 · 4+4 · 3+3 rpt — 3x</li><li>Abdução Sentada: 20 · desc 10s · 15 · desc 10s · 12 — 3x</li></ul>
+  </div>
+  <div class="ac"><div class="ach"><div class="aci">🦵</div><div><div class="acn">Coxa de Aço</div><div class="acm">~15 min · Pernas</div></div></div>
+    <ul class="acl"><li>Agachamento lado/meio/lado c/ insistência — 3x</li><li>Avanço c/ afundo lado 1 — 3x</li><li>Avanço c/ afundo lado 2 — 3x</li><li>Agachamento c/ salto + 2 curtinhos — 3x</li><li>½ Agachamento frontal · Cadeirinha — 3x</li></ul>
+  </div>
+  <div class="ac"><div class="ach"><div class="aci">💪</div><div><div class="acn">Barriga Trincada</div><div class="acm">~15 min · Core completo</div></div></div>
+    <ul class="acl"><li>Deadbug · Elevação de quadril isométrica</li><li>Abdominal bicicleta c/ tronco flexionado</li><li>Leg Cross Crunch lado 1 e 2</li><li>Perdigueiro alternado · Prancha c/ toque nos ombros</li><li>Prancha lateral sobe/desce cada lado</li></ul>
+  </div>
+</div>
+
+<!-- PROGRESSO -->
+<div id="page-prog" class="page">
+  <div class="stitle">Progresso</div>
+  <div class="ssub">Acompanhe sua evolução</div>
+  <div class="sb">
+    <h3>📊 Google Sheets</h3>
+    <p>Cole o URL do seu Google Sheet para salvar os treinos automaticamente.</p>
+    <input class="si" type="text" id="sheets-url" placeholder="https://script.google.com/macros/s/...">
+    <button class="sbtn" onclick="saveUrl()">💾 Salvar URL</button>
+    <div class="ss" id="ss-status"></div>
+  </div>
+  <div class="pc">
+    <div class="pct">⚖️ Peso Corporal</div>
+    <div class="ir"><input class="mi" type="number" id="wv" placeholder="ex: 68.5" step="0.1"><button class="ab" onclick="addW()">+ Registrar</button></div>
+    <div class="gw">
+      <div class="gns"><div><div class="gn cur" id="cw">—</div><div style="font-size:0.58rem;color:var(--muted)">atual</div></div><div style="color:var(--muted);font-size:0.8rem;">→</div><div><div class="gn tgt">66</div><div style="font-size:0.58rem;color:var(--muted)">meta julho</div></div></div>
+      <div class="gt"><div class="gf" id="gf" style="width:0%"></div></div>
+      <div class="gc" id="gcap">Registre seu peso para ver o progresso</div>
+    </div>
+    <div id="wlog" style="margin-top:10px;"></div>
+  </div>
+  <div class="pc"><div class="pct">🏋️ Pesos por Exercício</div><div id="exwd" style="font-size:0.76rem;color:var(--muted);">Nenhum peso registrado ainda.</div></div>
+  <div class="pc"><div class="pct">📅 Histórico</div><div id="hist" style="font-size:0.76rem;color:var(--muted);">Nenhum treino registrado ainda.</div></div>
+  <div class="pa">
+    <button class="pb bex" onclick="exportD()">💾 Exportar</button>
+    <button class="pb bdr" onclick="resetApp()">🗑️ Zerar</button>
+  </div>
+  <div style="font-size:0.62rem;color:var(--muted);text-align:center;margin-top:6px;">Exporte antes de zerar!</div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="mo" onclick="if(event.target===this)cm()">
+  <div class="mb">
+    <div class="mh"><div class="mt" id="mt"></div><button class="mc" onclick="cm()">✕</button></div>
+    <div class="ms">Substituições disponíveis na Planet Fitness</div>
+    <div id="mb"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let S={days:[false,false,false,false,false],streak:0,weights:[],history:[],exW:{},sheetsUrl:'',lastReset:''};
+function load(){try{const d=localStorage.getItem('dml_v5');if(d)Object.assign(S,JSON.parse(d));}catch(e){}weekReset();}
+function save(){try{localStorage.setItem('dml_v5',JSON.stringify(S));}catch(e){}}
+function weekReset(){const now=new Date();const day=now.getDay();const diff=day===0?-6:1-day;const m=new Date(now);m.setDate(now.getDate()+diff);m.setHours(0,0,0,0);const ms=m.toISOString().split('T')[0];if(S.lastReset!==ms){S.days=[false,false,false,false,false];S.lastReset=ms;save();}}
+function show(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));document.getElementById('page-'+id).classList.add('active');document.querySelectorAll('.nb').forEach(b=>{if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+id+"'"))b.classList.add('active');});window.scrollTo(0,0);}
+function done(id){document.getElementById(id).classList.toggle('done');}
+let wt={};
+function as(id){clearTimeout(wt[id]);wt[id]=setTimeout(()=>{const v=document.getElementById('w-'+id)?.value;if(v){S.exW[id]=v;save();const ws=document.getElementById('ws-'+id);if(ws){ws.style.display='inline';setTimeout(()=>ws.style.display='none',2000);}}},700);}
+function loadW(){Object.keys(S.exW).forEach(id=>{const el=document.getElementById('w-'+id);if(el)el.value=S.exW[id];});}
+function toggleDay(i){S.days[i]=!S.days[i];renderDays();save();}
+function renderDays(){S.days.forEach((c,i)=>{const el=document.getElementById('wd'+i);const lb=document.getElementById('wd'+i+'l');if(c){el.classList.add('chk');lb.textContent='✓';lb.style.color='var(--green)';}else{el.classList.remove('chk');lb.textContent='—';lb.style.color='';}});document.getElementById('st-week').textContent=S.days.filter(Boolean).length+'/5';document.getElementById('st-streak').textContent=S.streak;}
+const LABELS={seg1:'Agachamento Sumô Smith',seg2:'Polia Glúteo (Seg)',seg3:'Cadeira Extensora (Seg)',seg4:'Cadeira Abdutora (Seg)',ter1:'Graviton Aberta',ter2:'Remada Máquina',ter3:'Elevação Lateral',ter4:'Face Pull',qua1:'Stiff Halteres',qua2:'Polia Glúteo (Qua)',qua3:'Cadeira Flexora',qua4:'Cadeira Abdutora (Qua)',qui1:'Leg Press',qui2:'Cadeira Extensora (Qui)',qui3:'Afundo Smith',qui4:'Stiff Unilateral',sex1:'Graviton Fechado',sex2:'Supino Máquina',sex3:'Tríceps Polia',sex4:'Bíceps Polia'};
+function finish(day,name){const now=new Date();const weights={};Object.keys(S.exW).forEach(k=>{if(k.startsWith(day.toLowerCase()))weights[k]=S.exW[k];});S.history.unshift({day,name,date:now.toLocaleDateString('pt-BR'),time:now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),weights});if(S.history.length>30)S.history=S.history.slice(0,30);const map={SEG:0,TER:1,QUA:2,QUI:3,SEX:4};if(map[day]!==undefined){S.days[map[day]]=true;renderDays();}save();renderHist();toast('🔥 Treino concluído! Boa!');}
+function renderHist(){const el=document.getElementById('hist');if(!el)return;if(!S.history.length){el.textContent='Nenhum treino registrado ainda.';return;}el.innerHTML=S.history.slice(0,10).map(w=>`<div class="wlr"><span class="wld">${w.date} ${w.time}</span><span class="wlv">${w.day}</span><span style="font-size:0.65rem;color:var(--muted)">${w.name}</span></div>`).join('');}
+function addW(){const v=parseFloat(document.getElementById('wv').value);if(!v||v<30||v>200){toast('⚠️ Peso inválido');return;}const now=new Date();S.weights.unshift({val:v,date:now.toLocaleDateString('pt-BR')});if(S.weights.length>20)S.weights=S.weights.slice(0,20);document.getElementById('wv').value='';save();renderWeights();}
+function renderWeights(){const cur=S.weights[0];if(cur){document.getElementById('cw').textContent=cur.val+'kg';const pct=Math.min(100,Math.max(0,((70-cur.val)/(70-66))*100));document.getElementById('gf').style.width=pct+'%';const diff=(cur.val-66).toFixed(1);document.getElementById('gcap').textContent=diff>0?`Faltam ${diff}kg para julho 💪`:'🎉 Meta atingida!';}const log=document.getElementById('wlog');if(log)log.innerHTML=S.weights.slice(0,7).map(w=>`<div class="wlr"><span class="wld">${w.date}</span><span class="wlv">${w.val} kg</span></div>`).join('');}
+function renderExW(){const el=document.getElementById('exwd');if(!el)return;const keys=Object.keys(S.exW);if(!keys.length){el.innerHTML='<span style="color:var(--muted)">Nenhum peso registrado ainda.</span>';return;}el.innerHTML=keys.map(k=>`<div class="wlr"><span class="wld">${LABELS[k]||k}</span><span class="wlv">${S.exW[k]} kg</span></div>`).join('');}
+function saveUrl(){S.sheetsUrl=document.getElementById('sheets-url').value.trim();save();const st=document.getElementById('ss-status');st.textContent='✓ URL salvo!';st.className='ss ok';setTimeout(()=>st.textContent='',3000);}
+async function sync(day){if(!S.sheetsUrl){toast('⚠️ Configure o Sheets na aba Progresso');show('prog');return;}const weights={};Object.keys(S.exW).forEach(k=>{if(k.startsWith(day.toLowerCase()))weights[LABELS[k]||k]=S.exW[k];});const now=new Date();const payload={date:now.toLocaleDateString('pt-BR'),time:now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),workout:'Treino '+day,weights:JSON.stringify(weights)};try{toast('📤 Enviando...');await fetch(S.sheetsUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});toast('✅ Salvo!');}catch(e){toast('❌ Erro — verifique o URL');}}
+function yt(url){window.open(url,'_blank');}
+function sub(name,subs){document.getElementById('mt').textContent=name;document.getElementById('mb').innerHTML=subs.map(s=>`<div class="si2">↔ ${s}</div>`).join('');document.getElementById('modal').classList.add('show');}
+function cm(){document.getElementById('modal').classList.remove('show');}
+function exportD(){const now=new Date();const ds=now.toLocaleDateString('pt-BR').replace(/\//g,'-');let csv='Tipo,Data,Exercício,Valor\n';S.weights.forEach(w=>csv+=`Peso,${w.date},,${w.val} kg\n`);S.history.forEach(w=>{csv+=`Treino,${w.date} ${w.time},${w.day} - ${w.name},\n`;try{const ww=typeof w.weights==='string'?JSON.parse(w.weights):w.weights;Object.keys(ww).forEach(k=>csv+=`Peso,${w.date},${LABELS[k]||k},${ww[k]} kg\n`);}catch(e){}});Object.keys(S.exW).forEach(k=>csv+=`Peso Atual,${ds},${LABELS[k]||k},${S.exW[k]} kg\n`);const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`dml-${ds}.csv`;a.click();toast('💾 Exportado!');}
+function resetApp(){if(!confirm('Tem certeza? Exporte primeiro!'))return;const url=S.sheetsUrl;const lr=S.lastReset;S={days:[false,false,false,false,false],streak:0,weights:[],history:[],exW:{},sheetsUrl:url,lastReset:lr};save();renderDays();renderWeights();renderHist();renderExW();loadW();toast('🗑️ Zerado!');}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+load();renderDays();renderWeights();renderHist();renderExW();loadW();
+const su=document.getElementById('sheets-url');if(su&&S.sheetsUrl)su.value=S.sheetsUrl;
+if('serviceWorker'in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
+</script>
+</body>
+</html>
